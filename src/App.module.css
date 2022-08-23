@@ -1,0 +1,133 @@
+/* ダークモードへの対応 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #212121 !important;
+  }
+  h1 {
+    color: #ffffff;
+    text-align: center;
+  }
+}
+
+.container {
+  max-width: 1000px !important;
+}
+
+.container h1 {
+  margin: 1rem 0;
+}
+
+.menu {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'morning'
+    'lunch'
+    'dinner';
+  gap: 1rem;
+}
+
+/* レスポンシブ対応 */
+@media (min-width: 768px) {
+  .menu {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'morning dinner'
+      'lunch lunch';
+  }
+}
+
+/* 各セクション共通のスタイル */
+.menu section {
+  border-radius: 1rem;
+  overflow: hidden;
+
+  --morning-fg: #c00000;
+  --morning-bg: #ffcdd1;
+
+  --lunch-fg: #e26a0a;
+  --lunch-bg: #fddbc1;
+
+  --dinner-fg: #4e81be;
+  --dinner-bg: #d3dfef;
+}
+
+.menu section h2 {
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.menu section .body {
+  padding: 1rem;
+  display: grid;
+  border-radius: 0 0 1rem 1rem;
+  gap: 0.25rem;
+}
+
+.menu section .list {
+  position: relative;
+  top: 0;
+  padding: 0.25rem;
+  font-size: 1.25rem;
+  gap: 0.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: 0 0.1rem 0 0 #dddddd;
+  transition: top 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu section .list:hover {
+  top: 0.1rem;
+  box-shadow: none;
+}
+
+.menu section .left {
+  font-weight: bold;
+}
+
+/* 朝食 */
+.morning {
+  grid-area: morning;
+  background-color: var(--morning-bg);
+}
+
+.morning h2 {
+  background-color: var(--morning-fg);
+}
+
+.morning .left {
+  color: var(--morning-fg);
+}
+
+/* 昼食 */
+.lunch {
+  grid-area: lunch;
+  background-color: var(--lunch-bg);
+}
+
+.lunch h2 {
+  background-color: var(--lunch-fg);
+}
+
+.lunch .left {
+  color: var(--lunch-fg);
+}
+
+/* 夕食 */
+.dinner {
+  grid-area: dinner;
+  background-color: var(--dinner-bg);
+}
+
+.dinner h2 {
+  background-color: var(--dinner-fg);
+}
+
+.dinner .left {
+  color: var(--dinner-fg);
+}
