@@ -1,3 +1,7 @@
+body {
+  background-color: #fcfcfc !important;
+}
+
 /* ダークモードへの対応 */
 @media (prefers-color-scheme: dark) {
   body {
