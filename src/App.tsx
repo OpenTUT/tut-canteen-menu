@@ -41,13 +41,17 @@ export function App() {
 
   return (
     <Container className={styles.container}>
-      <h1>
-        豊橋技術科学大学
-        <br />
-        食堂メニュー
-      </h1>
+      {location.pathname !== '/inapp' ? (
+        <h1>
+          豊橋技術科学大学
+          <br />
+          食堂メニュー
+        </h1>
+      ) : (
+        <></>
+      )}
 
-      <select className="form-select" value={date} onChange={(e) => setDate(e.target.value)}>
+      <select className={`form-select ${styles.dropdown}`} value={date} onChange={(e) => setDate(e.target.value)}>
         {dates.map((x) => (
           <option value={x.key} key={x.key}>
             {x.value.format('YYYY年M月D日 (dd)')}
