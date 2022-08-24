@@ -1,7 +1,7 @@
 /* ダークモードへの対応 */
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #212121 !important;
+    background-color: #211919 !important;
   }
   h1 {
     color: #ffffff;
