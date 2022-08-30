@@ -15,19 +15,12 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrAfter);
 
 export function App() {
-  //const now = dayjs(new Date(2022, 7 - 1, 20));
   const now = dayjs();
 
   const menu = menuJson as unknown as Menu;
   const dates = Object.keys(menu)
-    .flatMap((x) => {
-      const date = dayjs(x, 'YYYY/M/D', 'ja');
-      if (date.isSameOrAfter(now)) {
-        return { key: x, value: date };
-      } else {
-        return [];
-      }
-    })
+    .filter((x) => dayjs(x, 'YYYY/M/D', 'ja').isSameOrAfter(now))
+    .map((x) => ({ key: x, value: dayjs(x, 'YYYY/M/D', 'ja') }))
     .sort((a, b) => (a.value.isAfter(b.value) ? 1 : -1))
     .slice(0, 7);
 
