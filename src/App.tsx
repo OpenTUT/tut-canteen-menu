@@ -15,8 +15,8 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrAfter);
 
 export function App() {
-  const now = dayjs(new Date(2022, 7 - 1, 20));
-  //const now = dayjs()
+  //const now = dayjs(new Date(2022, 7 - 1, 20));
+  const now = dayjs();
 
   const menu = menuJson as unknown as Menu;
   const dates = Object.keys(menu)
@@ -28,9 +28,10 @@ export function App() {
         return [];
       }
     })
-    .sort((a, b) => (a.value.isAfter(b.value) ? 1 : -1));
+    .sort((a, b) => (a.value.isAfter(b.value) ? 1 : -1))
+    .slice(0, 7);
 
-  const [date, setDate] = useState(dates[0].key);
+  const [date, setDate] = useState(dates[0]?.key);
 
   const [modalShow, setModalShow] = useState(false);
   const [modalDetails, setModalDetails] = useState<MenuItem | null>(null);
@@ -63,7 +64,7 @@ export function App() {
         <section className={styles.morning}>
           <h2>朝食</h2>
           <div className={styles.body}>
-            {Object.entries(menu[date]['朝食'] ?? {})
+            {Object.entries(menu[date]?.['朝食'] ?? {})
               .sort()
               .map((x) => (
                 <div className={styles.list} key={x[0]} onClick={() => openModal(x[1])}>
@@ -77,7 +78,7 @@ export function App() {
         <section className={styles.lunch}>
           <h2>昼食</h2>
           <div className={styles.body}>
-            {Object.entries(menu[date]['昼食'] ?? {})
+            {Object.entries(menu[date]?.['昼食'] ?? {})
               .sort()
               .map((x) => (
                 <div className={styles.list} key={x[0]} onClick={() => openModal(x[1])}>
@@ -91,7 +92,7 @@ export function App() {
         <section className={styles.dinner}>
           <h2>夕食</h2>
           <div className={styles.body}>
-            {Object.entries(menu[date]['夕食'] ?? {})
+            {Object.entries(menu[date]?.['夕食'] ?? {})
               .sort()
               .map((x) => (
                 <div className={styles.list} key={x[0]} onClick={() => openModal(x[1])}>
