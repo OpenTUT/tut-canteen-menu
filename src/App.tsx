@@ -42,7 +42,11 @@ export function App() {
           食堂メニュー
         </h1>
       ) : (
-        <></>
+        <style>
+          {`html, body {
+            background-color: transparent !important;
+          }`}
+        </style>
       )}
 
       <select className={`form-select ${styles.dropdown}`} value={date} onChange={(e) => setDate(e.target.value)}>
