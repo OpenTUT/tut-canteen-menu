@@ -15,7 +15,7 @@ dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrAfter);
 
 export function App() {
-  const now = dayjs();
+  const now = dayjs().startOf('date');
 
   const menu = menuJson as unknown as Menu;
   const dates = Object.keys(menu)
