@@ -13,7 +13,7 @@ def parse_csv(f: Iterable[str]):
 out = {}
 
 for path in glob.glob("./csv/*.csv"):
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         for record in parse_csv(f):
             if record["提供日"] not in out:
                 out[record["提供日"]] = {}
@@ -39,5 +39,5 @@ for path in glob.glob("./csv/*.csv"):
                 ),
             }
 
-with open("./src/assets/menu.json", "w") as f:
+with open("./src/assets/menu.json", "w", encoding="utf-8") as f:
     json.dump(out, f, separators=(",", ":"), ensure_ascii=False)
