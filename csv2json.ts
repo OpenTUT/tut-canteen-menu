@@ -64,12 +64,16 @@ for (const path of await glob('./csv/*.csv')) {
   }
 }
 
-const output: Menu[] = [...menus.values()].sort().map((x) => ({
-  date: x.date,
-  morning: x.morning.sort((a, b) => a.category.localeCompare(b.category, 'ja')),
-  lunch: x.lunch.sort((a, b) => a.category.localeCompare(b.category, 'ja')),
-  dinner: x.dinner.sort((a, b) => a.category.localeCompare(b.category, 'ja')),
-}));
+const output: Menu[] = [...menus.values()]
+  .sort((a, b) => a.date.localeCompare(b.date, 'ja'))
+  .map((x) => ({
+    date: x.date,
+    morning: x.morning.sort((a, b) =>
+      a.category.localeCompare(b.category, 'ja')
+    ),
+    lunch: x.lunch.sort((a, b) => a.category.localeCompare(b.category, 'ja')),
+    dinner: x.dinner.sort((a, b) => a.category.localeCompare(b.category, 'ja')),
+  }));
 
 await fs.promises.mkdir('./public', { recursive: true });
 await fs.promises.writeFile('./public/menus.json', JSON.stringify(output));
