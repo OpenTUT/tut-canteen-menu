@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "tsx csv2json.ts && vite",
+    "build": "tsx csv2json.ts && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,9 +17,13 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.2",
+    "@types/node": "^20.12.7",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
+    "csv-parse": "^5.5.5",
+    "glob": "^10.3.12",
+    "tsx": "^4.7.2",
     "typescript": "^4.6.4",
     "vite": "^3.0.7"
   }

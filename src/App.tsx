@@ -1,39 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import 'dayjs/locale/ja';
-
 import { Container } from 'react-bootstrap';
 import { CanteenModal } from './CanteenModal';
-import { MenuItem, Menu } from './types';
+import type { Menu } from '../csv2json';
 
-import menuJson from './assets/menu.json';
 import styles from './App.module.css';
+import React from 'react';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrAfter);
 
 export function App() {
+  const [menus, setMenus] = useState<Menu[]>();
+  const [dates, setDates] = useState<dayjs.Dayjs[]>([]);
+  const [date, setDate] = useState(0);
+  const [modalShow, setModalShow] = useState('');
+
   const now = dayjs().startOf('date');
 
-  const menu = menuJson as unknown as Menu;
-  const dates = Object.keys(menu)
-    .filter((x) => dayjs(x, 'YYYY/M/D', 'ja').isSameOrAfter(now))
-    .map((x) => ({ key: x, value: dayjs(x, 'YYYY/M/D', 'ja') }))
-    .sort((a, b) => (a.value.isAfter(b.value) ? 1 : -1))
-    .slice(0, 7);
+  useEffect(() => {
+    fetch('/menus.json')
+      .then((res) => res.json())
+      .then((res) => {
+        setMenus(res);
+      });
+  }, []);
 
-  const [date, setDate] = useState(dates[0]?.key);
+  useEffect(() => {
+    if (!menus) {
+      return;
+    }
+    const dates = menus
+      .map((x) => dayjs(x.date, 'YYYY-MM-DD', 'ja'))
+      .filter((x) => x.isSameOrAfter(now))
+      .slice(0, 7);
+    setDates(dates);
+  }, [menus]);
 
-  const [modalShow, setModalShow] = useState(false);
-  const [modalDetails, setModalDetails] = useState<MenuItem | null>(null);
-  const openModal = (details: MenuItem) => {
-    setModalDetails(details);
-    setModalShow(true);
-  };
-
-  return (
+  return menus ? (
     <Container className={styles.container}>
       {location.pathname !== '/inapp' ? (
         <h1>
@@ -49,10 +56,14 @@ export function App() {
         </style>
       )}
 
-      <select className={`form-select ${styles.dropdown}`} value={date} onChange={(e) => setDate(e.target.value)}>
-        {dates.map((x) => (
-          <option value={x.key} key={x.key}>
-            {x.value.format('YYYY年M月D日 (dd)')}
+      <select
+        className={`form-select ${styles.dropdown}`}
+        value={date}
+        onChange={(e) => setDate(parseInt(e.target.value))}
+      >
+        {dates.map((x, i) => (
+          <option value={i} key={i}>
+            {x.format('YYYY年M月D日 (dd)')}
           </option>
         ))}
       </select>
@@ -61,51 +72,69 @@ export function App() {
         <section className={styles.morning}>
           <h2>朝食</h2>
           <div className={styles.body}>
-            {Object.entries(menu[date]?.['朝食'] ?? {})
-              .sort()
-              .map((x) => (
-                <div className={styles.list} key={x[0]} onClick={() => openModal(x[1])}>
-                  <div className={styles.left}>{x[0]}</div>
-                  <div>{x[1].name}</div>
+            {menus[date].morning.map((x, i) => (
+              <React.Fragment key={i}>
+                <div
+                  className={styles.list}
+                  onClick={() => setModalShow(`morning${i}`)}
+                >
+                  <div className={styles.left}>{x.category}</div>
+                  <div>{x.name}</div>
                 </div>
-              ))}
+                <CanteenModal
+                  show={modalShow === `morning${i}`}
+                  details={x}
+                  onHide={() => setModalShow('')}
+                ></CanteenModal>
+              </React.Fragment>
+            ))}
           </div>
         </section>
 
         <section className={styles.lunch}>
           <h2>昼食</h2>
           <div className={styles.body}>
-            {Object.entries(menu[date]?.['昼食'] ?? {})
-              .sort()
-              .map((x) => (
-                <div className={styles.list} key={x[0]} onClick={() => openModal(x[1])}>
-                  <div className={styles.left}>{x[0]}</div>
-                  <div>{x[1].name}</div>
+            {menus[date].lunch.map((x, i) => (
+              <React.Fragment key={i}>
+                <div
+                  className={styles.list}
+                  onClick={() => setModalShow(`lunch${i}`)}
+                >
+                  <div className={styles.left}>{x.category}</div>
+                  <div>{x.name}</div>
                 </div>
-              ))}
+                <CanteenModal
+                  show={modalShow === `lunch${i}`}
+                  details={x}
+                  onHide={() => setModalShow('')}
+                ></CanteenModal>
+              </React.Fragment>
+            ))}
           </div>
         </section>
 
         <section className={styles.dinner}>
           <h2>夕食</h2>
           <div className={styles.body}>
-            {Object.entries(menu[date]?.['夕食'] ?? {})
-              .sort()
-              .map((x) => (
-                <div className={styles.list} key={x[0]} onClick={() => openModal(x[1])}>
-                  <div className={styles.left}>{x[0]}</div>
-                  <div>{x[1].name}</div>
+            {menus[date].dinner.map((x, i) => (
+              <React.Fragment key={i}>
+                <div
+                  className={styles.list}
+                  onClick={() => setModalShow(`dinner${i}`)}
+                >
+                  <div className={styles.left}>{x.category}</div>
+                  <div>{x.name}</div>
                 </div>
-              ))}
+                <CanteenModal
+                  show={modalShow === `dinner${i}`}
+                  details={x}
+                  onHide={() => setModalShow('')}
+                ></CanteenModal>
+              </React.Fragment>
+            ))}
           </div>
         </section>
       </main>
-
-      {modalDetails ? (
-        <CanteenModal show={modalShow} details={modalDetails} onHide={() => setModalShow(false)}></CanteenModal>
-      ) : (
-        <></>
-      )}
     </Container>
-  );
+  ) : null;
 }

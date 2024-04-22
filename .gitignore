@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # ビルド時に生成するため除外
-/src/assets/menu.json
+/public/menus.json

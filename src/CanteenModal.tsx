@@ -1,9 +1,12 @@
 import { Modal, Table } from 'react-bootstrap';
-import { MenuItem } from './types';
-
 import styles from './CanteenModal.module.css';
+import { MenuItem } from '../csv2json';
 
-export function CanteenModal(props: { show: boolean; details: MenuItem; onHide: () => void }) {
+export function CanteenModal(props: {
+  show: boolean;
+  details: MenuItem;
+  onHide: () => void;
+}) {
   return (
     <Modal show={props.show} onHide={props.onHide} centered>
       <Modal.Header closeButton>
