@@ -15,7 +15,9 @@ dayjs.extend(isSameOrAfter);
 
 export function App() {
   const [menus, setMenus] = useState<Menu[]>();
-  const [dates, setDates] = useState<dayjs.Dayjs[]>([]);
+  const [dates, setDates] = useState<{ index: number; date: dayjs.Dayjs }[]>(
+    []
+  );
   const [date, setDate] = useState(0);
   const [modalShow, setModalShow] = useState('');
 
@@ -34,9 +36,10 @@ export function App() {
       return;
     }
     const dates = menus
-      .map((x) => dayjs(x.date, 'YYYY-MM-DD', 'ja'))
-      .filter((x) => x.isSameOrAfter(now))
+      .map((x, i) => ({ index: i, date: dayjs(x.date, 'YYYY-MM-DD', 'ja') }))
+      .filter((x) => x.date.isSameOrAfter(now))
       .slice(0, 7);
+    setDate(dates[0].index);
     setDates(dates);
   }, [menus]);
 
@@ -62,8 +65,8 @@ export function App() {
         onChange={(e) => setDate(parseInt(e.target.value))}
       >
         {dates.map((x, i) => (
-          <option value={i} key={i}>
-            {x.format('YYYY年M月D日 (dd)')}
+          <option value={x.index} key={i}>
+            {x.date.format('YYYY年M月D日 (dd)')}
           </option>
         ))}
       </select>
